@@ -17,11 +17,13 @@ class AuthenticatedSessionController extends Controller
 {
     $request->authenticate();
 
+    $user = $request->user();
+
     $token = $request->user()->createToken('auth-token')->plainTextToken;
 
     return response()->json([
         'token' => $token,
-        'user' => $request->user()
+        'user' => $user,
     ]);
 }
     /**

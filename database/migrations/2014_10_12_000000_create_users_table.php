@@ -17,6 +17,12 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('phone')->unique()->index(); //فهرس للهاتف
+            $table->enum('role', ['member', 'coach', 'admin']);
+            $table->enum('gender', ['male', 'female']);
+            $table->date('birth_date')->nullable();
+            $table->string('profile_image')->nullable();
+            $table->string('fingerprint_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

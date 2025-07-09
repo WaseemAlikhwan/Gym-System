@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules;
 use Illuminate\Http\JsonResponse;
 
@@ -26,12 +27,23 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'phone' => ['required', 'string', 'unique:users,phone'],
+            'role' => ['required', Rule::in(['member', 'coach'])], // فقط السماح بهذان الدوران
+            'gender' => ['required', Rule::in(['male', 'female'])],
+            'birth_date' => ['nullable', 'date'],
+            'profile_image' => ['nullable', 'string'],
+
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'phone' => $request->phone,
+            'role' => $request->role,
+            'gender' => $request->gender,
+            'birth_date' => $request->birth_date,
+            'profile_image' => $request->profile_image,
         ]);
 
         event(new Registered($user));
